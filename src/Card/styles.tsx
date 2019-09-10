@@ -21,6 +21,7 @@ const ExpandableHeader = styled.p`
   font-size: 14px;
   line-height: 150%;
   margin: 0;
+  padding-bottom: 8px;
 `;
 
 const SubCard = styled.div<CardProps>`

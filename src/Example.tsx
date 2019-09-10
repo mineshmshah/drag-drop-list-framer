@@ -40,7 +40,7 @@ const Item = ({ color, setPosition, moveItem, i } : ItemProps ) => {
       // If we're dragging, we want to set the zIndex of that item to be on top of the other items.
       animate={isDragging ? onTop : flat}
       style={{ background: color, height: 'auto' }}
-      whileHover={{ scale: 1.03 }}
+      whileHover={{ boxShadow: `0px 1px 4px rgba(0, 0, 0, 0.2)` }}
       // whileTap={{ scale: 1.12 }}
       drag="y"
       dragOriginY={dragOriginY}
