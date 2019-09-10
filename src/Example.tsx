@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { motion, useMotionValue } from "framer-motion";
 import { findIndex, Position } from "./find-index";
 import move from "array-move";
-import Expandable from './Expandable';
+import Expandable from './Card';
 
 interface ItemProps {
   color : string,
@@ -39,9 +39,9 @@ const Item = ({ color, setPosition, moveItem, i } : ItemProps ) => {
       initial={false}
       // If we're dragging, we want to set the zIndex of that item to be on top of the other items.
       animate={isDragging ? onTop : flat}
-      style={{ background: color, height: heights[color] }}
+      style={{ background: color, height: 'auto' }}
       whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 1.12 }}
+      // whileTap={{ scale: 1.12 }}
       drag="y"
       dragOriginY={dragOriginY}
       dragConstraints={{ top: 0, bottom: 0 }}
