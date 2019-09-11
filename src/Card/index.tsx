@@ -7,16 +7,15 @@ interface ExpandableComponentProps {
 }
 
 const ExpandableComponent = ({title} : ExpandableComponentProps) => {
-    const [isCardOpen, setIsCardOpen] = useState(false)
-    const [isSubCardOpen, setIsSubCardOpen] = useState(false)
+    const [isCardOpen, setIsCardOpen] = useState(false);
 
-    const onSubCardClick = (e : React.MouseEvent<HTMLElement>) => {
+     const onCardClick = (e : React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
         e.stopPropagation();
-        setIsSubCardOpen(!isSubCardOpen)
+        setIsCardOpen(!isCardOpen)
     };
 
     return (
-        <ExpandableContainer isCardOpen={isCardOpen} onClick={() => setIsCardOpen(!isCardOpen)}>
+        <ExpandableContainer isCardOpen={isCardOpen} onClick={e => onCardClick(e)} onTouchStart={e => onCardClick(e)}>
             <ExpandableHeader>
                 {title}
             </ExpandableHeader>
