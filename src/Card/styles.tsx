@@ -9,7 +9,7 @@ const ExpandableContainer = styled.div<CardProps>`
   height: ${({isCardOpen}) => isCardOpen ? 'auto': '40px'};
   //max-height: ${({isCardOpen}) => isCardOpen ? 'auto': '40px'};
   box-sizing: border-box;
-  width: 440px;
+  width: 350px;
   border-radius: 4px;
   background: ${({isCardOpen}) => isCardOpen ? '#ffc591': '#FFF'};
   padding: 8px;

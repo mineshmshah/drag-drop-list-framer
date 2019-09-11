@@ -1,10 +1,6 @@
 import styled from "styled-components/macro";
 
-const randomHeight = () => {
-    const x = Math.floor(Math.random()*10) *10 + 55
-    console.log(x)
-    return x
-};
+const randomHeight = () =>  Math.floor(Math.random()*10) *10 + 55;
 
 const ComponentContainer = styled.div`
   box-sizing: border-box;

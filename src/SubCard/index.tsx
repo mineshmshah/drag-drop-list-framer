@@ -9,13 +9,13 @@ interface SubCardComponentProps {
 const SubCardComponent = ({title} : SubCardComponentProps) => {
     const [isSubCardOpen, setIsSubCardOpen] = useState(false)
 
-    const onSubCardClick = (e : React.MouseEvent<HTMLElement>) => {
+    const onSubCardClick = (e : React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
         e.stopPropagation();
         setIsSubCardOpen(!isSubCardOpen)
     };
 
     return (
-        <SubCardContainer isCardOpen={isSubCardOpen} onClick={(e) => onSubCardClick(e)}>
+        <SubCardContainer isCardOpen={isSubCardOpen} onTouchStart={(e) => onSubCardClick(e)} onClick={(e) => onSubCardClick(e)}>
             <SubCardHeader>
                 {title}
             </SubCardHeader>

@@ -6,7 +6,7 @@ interface ExpandableComponentProps {
 }
 
 const ContainerComponent = ({title} : ExpandableComponentProps) => {
-    const onContainerClick = (e : React.MouseEvent<HTMLElement>) => {
+    const onContainerClick = (e : React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
         e.stopPropagation();
     };
 
