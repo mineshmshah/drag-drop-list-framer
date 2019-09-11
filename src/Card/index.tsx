@@ -4,10 +4,9 @@ import SubCard from '../SubCard'
 
 interface ExpandableComponentProps {
     title: string,
-    isDragging: boolean
 }
 
-const ExpandableComponent = ({title, isDragging} : ExpandableComponentProps) => {
+const ExpandableComponent = ({title} : ExpandableComponentProps) => {
     const [isCardOpen, setIsCardOpen] = useState(false)
     const [isSubCardOpen, setIsSubCardOpen] = useState(false)
 
