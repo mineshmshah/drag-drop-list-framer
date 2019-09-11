@@ -16,7 +16,7 @@ const ExpandableComponent = ({title} : ExpandableComponentProps) => {
     };
 
     return (
-        <ExpandableContainer isCardOpen={isCardOpen} onTouchStart={(e) => onSubCardClick(e)} onClick={() => setIsCardOpen(!isCardOpen)}>
+        <ExpandableContainer isCardOpen={isCardOpen} onTouchStart={(e) => onSubCardClick(e)} onClick={(e) => onSubCardClick(e)}>
             <ExpandableHeader>
                 {title}
             </ExpandableHeader>
