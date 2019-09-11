@@ -4,18 +4,21 @@ import SubCard from '../SubCard'
 
 interface ExpandableComponentProps {
     title: string,
+    isDragging: boolean
 }
 
-const ExpandableComponent = ({title} : ExpandableComponentProps) => {
+const ExpandableComponent = ({title, isDragging} : ExpandableComponentProps) => {
     const [isCardOpen, setIsCardOpen] = useState(false);
 
      const onCardClick = (e : React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
-        e.stopPropagation();
-        setIsCardOpen(!isCardOpen)
+        if(isDragging){
+            e.stopPropagation();
+            setIsCardOpen(!isCardOpen)
+        }
     };
 
     return (
-        <ExpandableContainer isCardOpen={isCardOpen} onClick={e => onCardClick(e)} onTouchStart={e => onCardClick(e)}>
+        <ExpandableContainer isCardOpen={isCardOpen} onClick={e => onCardClick(e)} onTouchEnd={e => onCardClick(e)}>
             <ExpandableHeader>
                 {title}
             </ExpandableHeader>
