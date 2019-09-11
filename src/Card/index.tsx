@@ -4,22 +4,42 @@ import SubCard from '../SubCard'
 
 interface ExpandableComponentProps {
     title: string,
+    isDragging: boolean
 }
 
-const ExpandableComponent = ({title} : ExpandableComponentProps) => {
+const ExpandableComponent = ({title, isDragging} : ExpandableComponentProps) => {
     const [isCardOpen, setIsCardOpen] = useState(false);
+    const [hasDragged, setHasDragged] = useState(false)
 
-     const onCardClick = (e : React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
-        e.stopPropagation();
-        setIsCardOpen(!isCardOpen)
+    const onPointerDown = (e : React.PointerEvent<HTMLElement>) => setHasDragged(false);
+    const onPointerMove = (e : React.PointerEvent<HTMLElement>) => {
+        if(isDragging) setHasDragged(true)
     };
+    const onPointerUp = (e : React.PointerEvent<HTMLElement>) => {
+        if(!hasDragged) {
+            e.stopPropagation();
+            setIsCardOpen(!isCardOpen)
+        }
+    };
+    //
+    //  const onCardClick = (e : React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
+    //      console.log(isDragging)
+    //      if(true) {
+    //          e.stopPropagation();
+    //          setIsCardOpen(!isCardOpen)
+    //      }
+    // };
 
     return (
-        <ExpandableContainer isCardOpen={isCardOpen} onClick={e => onCardClick(e)} onTouchStart={e => onCardClick(e)}>
+        <ExpandableContainer
+            isCardOpen={isCardOpen}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={e => onPointerUp(e)}>
             <ExpandableHeader>
                 {title}
             </ExpandableHeader>
-            {isCardOpen && <SubCard title={'SubCard Example'}/>}
+            {isCardOpen && <SubCard title={'SubCard Example'} isDragging={isDragging}/>}
         </ExpandableContainer>
     );
 };
