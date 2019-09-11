@@ -66,7 +66,7 @@ const Item = ({ color, setPosition, moveItem, i } : ItemProps ) => {
         return !isDragging;
       }}
     >
-      <Expandable title={'hello'} isDragging={isDragging}/>
+      <Expandable title={'hello'}/>
     </motion.li>
   );
 };
