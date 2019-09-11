@@ -11,7 +11,7 @@ const ExpandableContainer = styled.div<CardProps>`
   box-sizing: border-box;
   width: 440px;
   border-radius: 4px;
-  background: ${({isCardOpen}) => isCardOpen ? '#FF008C': '#FFF'};
+  background: ${({isCardOpen}) => isCardOpen ? '#ffc591': '#FFF'};
   padding: 8px;
 `;
 

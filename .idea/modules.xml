@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/framer-motion-drag-to-reorder.iml" filepath="$PROJECT_DIR$/.idea/framer-motion-drag-to-reorder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../drag-drop-list-framer/.idea/drag-drop-list-framer.iml" filepath="$PROJECT_DIR$/../drag-drop-list-framer/.idea/drag-drop-list-framer.iml" />
     </modules>
   </component>
 </project>

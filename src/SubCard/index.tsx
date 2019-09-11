@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { SubCardContainer, SubCardHeader } from './styles'
+import { ComponentContainer } from "../ComponentContainer/styles";
 
-interface ExpandableComponentProps {
+interface SubCardComponentProps {
     title: string
 }
 
-const ExpandableComponent = ({title} : ExpandableComponentProps) => {
+const SubCardComponent = ({title} : SubCardComponentProps) => {
     const [isSubCardOpen, setIsSubCardOpen] = useState(false)
 
     const onSubCardClick = (e : React.MouseEvent<HTMLElement>) => {
@@ -18,8 +19,9 @@ const ExpandableComponent = ({title} : ExpandableComponentProps) => {
             <SubCardHeader>
                 {title}
             </SubCardHeader>
+            {isSubCardOpen && <ComponentContainer title={'Some content'}/>}
         </SubCardContainer>
     );
 };
 
-export default ExpandableComponent;
+export default SubCardComponent;

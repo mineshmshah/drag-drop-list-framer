@@ -3,10 +3,11 @@ import { ExpandableHeader, ExpandableContainer } from './styles'
 import SubCard from '../SubCard'
 
 interface ExpandableComponentProps {
-    title: string
+    title: string,
+    isDragging: boolean
 }
 
-const ExpandableComponent = ({title} : ExpandableComponentProps) => {
+const ExpandableComponent = ({title, isDragging} : ExpandableComponentProps) => {
     const [isCardOpen, setIsCardOpen] = useState(false)
     const [isSubCardOpen, setIsSubCardOpen] = useState(false)
 

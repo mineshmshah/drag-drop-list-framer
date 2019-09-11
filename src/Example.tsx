@@ -49,6 +49,9 @@ const Item = ({ color, setPosition, moveItem, i } : ItemProps ) => {
       onDragStart={() => setDragging(true)}
       onDragEnd={() => setDragging(false)}
       onDrag={(e, { point }) => moveItem(i, point.y)}
+      // onUpdate={({ y, top }) => {
+      //   !isDragging && dragOriginY.set((y || top) as number);
+      // }}
       positionTransition={({ delta }) => {
         if (isDragging) {
           // If we're dragging, we want to "undo" the items movement within the list
