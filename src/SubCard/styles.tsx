@@ -1,10 +1,11 @@
 import styled from "styled-components/macro";
+import { motion } from "framer-motion";
 
 interface CardProps {
     isCardOpen: boolean
 }
 
-const SubCardContainer = styled.div<CardProps>`
+const SubCardContainer = styled(motion.div)<CardProps>`
   min-height: 40px;
   height: ${({isCardOpen}) => isCardOpen ? 'auto': '40px'};
   box-sizing: border-box;

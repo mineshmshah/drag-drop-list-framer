@@ -1,10 +1,12 @@
 import styled from "styled-components/macro";
+import { motion } from "framer-motion";
+
 
 interface CardProps {
     isCardOpen: boolean
 }
 
-const ExpandableContainer = styled.div<CardProps>`
+const ExpandableContainer = styled(motion.div)<CardProps>`
   min-height: 40px;
   height: ${({isCardOpen}) => isCardOpen ? 'auto': '40px'};
   //max-height: ${({isCardOpen}) => isCardOpen ? 'auto': '40px'};

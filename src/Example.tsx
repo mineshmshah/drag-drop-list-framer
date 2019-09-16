@@ -19,7 +19,7 @@ const Item = ({ color, setPosition, moveItem, i } : ItemProps ) => {
   // This will allow us to measure its height and position, which will be useful to
   // decide when a dragging element should switch places with its siblings.
   const ref = useRef<any>(null);
-
+  console.log(ref)
   // By manually creating a reference to `dragOriginY` we can manipulate this value
   // if the user is dragging this DOM element while the drag gesture is active to
   // compensate for any movement as the items are re-positioned.
@@ -53,18 +53,18 @@ const Item = ({ color, setPosition, moveItem, i } : ItemProps ) => {
       //   !isDragging && dragOriginY.set((y || top) as number);
       // }}
       positionTransition={({ delta }) => {
-        if (isDragging) {
-          // If we're dragging, we want to "undo" the items movement within the list
-          // by manipulating its dragOriginY. This will keep the item under the cursor,
-          // even though it's jumping around the DOM.
-          dragOriginY.set(dragOriginY.get() + delta.y);
-        }
+      if (isDragging) {
+        // If we're dragging, we want to "undo" the items movement within the list
+        // by manipulating its dragOriginY. This will keep the item under the cursor,
+        // even though it's jumping around the DOM.
+        dragOriginY.set(dragOriginY.get() + delta.y);
+      }
 
-        // If `positionTransition` is a function and returns `false`, it's telling
-        // Motion not to animate from its old position into its new one. If we're
-        // dragging, we don't want any animation to occur.
-        return !isDragging;
-      }}
+      // If `positionTransition` is a function and returns `false`, it's telling
+      // Motion not to animate from its old position into its new one. If we're
+      // dragging, we don't want any animation to occur.
+      return !isDragging;
+    }}
     >
       <Expandable title={'hello'} isDragging={isDragging}/>
     </motion.li>
