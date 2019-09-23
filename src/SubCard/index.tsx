@@ -26,16 +26,21 @@ const SubCardComponent = ({title, isDragging} : SubCardComponentProps) => {
     //     e.stopPropagation();
     //     setIsSubCardOpen(!isSubCardOpen)
     // };
+    const onTap = (e : Event) => {
+        e.stopImmediatePropagation();
+        setIsSubCardOpen(!isSubCardOpen)
+    };
 
     return (
         <SubCardContainer
             isCardOpen={isSubCardOpen}
-            onPointerUp={e => onPointerUp(e)}
-            onTouchStart={onPointerDown}
-            onTouchMove={onPointerMove}
-            onTouchEnd={e => onPointerUp(e)}
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
+            // onPointerUp={e => onPointerUp(e)}
+            // onTouchStart={onPointerDown}
+            // onTouchMove={onPointerMove}
+            // onTouchEnd={e => onPointerUp(e)}
+            // onPointerDown={onPointerDown}
+            // onPointerMove={onPointerMove}
+            onTap={onTap}
         >
             <SubCardHeader>
                 {title}

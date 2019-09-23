@@ -19,12 +19,11 @@ const Item = ({ color, setPosition, moveItem, i } : ItemProps ) => {
   // This will allow us to measure its height and position, which will be useful to
   // decide when a dragging element should switch places with its siblings.
   const ref = useRef<any>(null);
-  console.log(ref)
   // By manually creating a reference to `dragOriginY` we can manipulate this value
   // if the user is dragging this DOM element while the drag gesture is active to
   // compensate for any movement as the items are re-positioned.
   const dragOriginY = useMotionValue(0);
-
+  console.log(dragOriginY)
   // Update the measured position of the item so we can calculate when we should rearrange.
   useEffect(() => {
     setPosition(i, {
@@ -48,7 +47,9 @@ const Item = ({ color, setPosition, moveItem, i } : ItemProps ) => {
       dragElastic={1}
       onDragStart={() => setDragging(true)}
       onDragEnd={() => setDragging(false)}
-      onDrag={(e, { point }) => moveItem(i, point.y)}
+      onDrag={(e, { point }) => {
+        return moveItem(i, point.y);
+      }}
       // onUpdate={({ y, top }) => {
       //   !isDragging && dragOriginY.set((y || top) as number);
       // }}

@@ -30,16 +30,22 @@ const ExpandableComponent = ({title, isDragging} : ExpandableComponentProps) => 
     //          setIsCardOpen(!isCardOpen)
     //      }
     // };
+    const onTap = (e : Event) => {
+        e.stopImmediatePropagation();
+        setIsCardOpen(!isCardOpen)
+    };
 
     return (
         <ExpandableContainer
+            onMouseDown={()=>console.log('hello')}
             isCardOpen={isCardOpen}
-            onTouchStart={onPointerDown}
-            onTouchMove={onPointerMove}
-            onTouchEnd={e => onPointerUp(e)}
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
-            onPointerUp={e => onPointerUp(e)}
+            onTap={onTap}
+            // onTouchStart={onPointerDown}
+            // onTouchMove={onPointerMove}
+            // onTouchEnd={e => onPointerUp(e)}
+            // onPointerDown={onPointerDown}
+            // onPointerMove={onPointerMove}
+            // onPointerUp={e => onPointerUp(e)}
         >
             <ExpandableHeader>
                 {title}
