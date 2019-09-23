@@ -118,3 +118,67 @@ const heights:any = {
   "#9C1AFF": 90,
   "#7700FF": 100
 };
+
+
+const DefaultObject = [
+  {
+    id: 1,
+    header: "Header",
+    expanded: false,
+    error: false,
+    elements: [
+      {
+        id: 1,
+        header: "Title",
+        component: "text",
+        content:{}
+      },
+      {
+        id: 2,
+        header: "Text",
+        component: "text",
+        content:{}
+      }
+    ]
+  },
+  {
+    id: 2,
+    header: "Content",
+    expanded: false,
+    error: false,
+    elements: [
+      {
+        id: 1,
+        header: "Title",
+        component: "text",
+        content:{}
+      },
+    ]
+  },
+  {
+    id: 3,
+    header: "Content",
+    expanded: false,
+    error: false,
+    elements: [
+      {
+        id: 1,
+        header: "Title",
+        component: "text",
+        content:{}
+      },
+      {
+        id: 2,
+        header: "Text",
+        component: "text",
+        content:{}
+      },
+      {
+        id: 3,
+        header: "Another text",
+        component: "text",
+        content:{}
+      }
+    ]
+  }
+];
