@@ -102,10 +102,10 @@ export const Example = () => {
           moveItem={moveItem}
         >
           <Card title={header}>
-            {/*{elements.map(({header, id}) => (*/}
-            {/*    <SubCard title={header} key={id}/>*/}
-            {/*    )*/}
-            {/*)}*/}
+            {elements.map(({header, id}) => (
+                <SubCard title={header} key={id}/>
+                )
+            )}
           </Card>
         </Item>
       ))}
