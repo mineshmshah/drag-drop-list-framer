@@ -5,10 +5,9 @@ import {ExpandableContainer} from "../Card/styles";
 
 interface SubCardComponentProps {
     title: string,
-    isDragging: boolean
 }
 
-const SubCardComponent = ({title, isDragging} : SubCardComponentProps) => {
+const SubCardComponent = ({title} : SubCardComponentProps) => {
     const [isSubCardOpen, setIsSubCardOpen] = useState(false);
     const onTap = (e : Event) => {
         e.stopImmediatePropagation();

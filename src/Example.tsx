@@ -6,13 +6,13 @@ import move from "array-move";
 import Expandable from './Card';
 
 interface ItemProps {
-  header : string,
   setPosition: any,
   moveItem: any,
-  i: number
+  i: number,
+  children: any
 }
 
-const Item = ({ header, setPosition, moveItem, i } : ItemProps ) => {
+const Item = ({ setPosition, moveItem, i, ...rest } : ItemProps, ) => {
   const [isDragging, setDragging] = useState(false);
 
   // We'll use a `ref` to access the DOM element that the `motion.li` produces.
@@ -66,9 +66,8 @@ const Item = ({ header, setPosition, moveItem, i } : ItemProps ) => {
       // dragging, we don't want any animation to occur.
       return !isDragging;
     }}
-    >
-      <Expandable title={header} isDragging={isDragging}/>
-    </motion.li>
+      {...rest}
+    />
   );
 };
 
@@ -82,6 +81,7 @@ export const Example = () => {
   // `Item` should swap places with its siblings.
   const positions = useRef<Position[]>([]).current;
   const setPosition = (i: number, offset: Position) => (positions[i] = offset);
+  const setChildPosition = (i: number, j: number, offset: Position) => (positions[i]['elements'][j] = offset);
 
   // Find the ideal index for a dragging item based on its position in the array, and its
   // current drag offset. If it's different to its current index, we swap this item with that
@@ -100,7 +100,9 @@ export const Example = () => {
           setPosition={setPosition}
           moveItem={moveItem}
           header={header}
-        />
+        >
+          <Expandable title={header}/>
+        </Item>
       ))}
     </ul>
   );
