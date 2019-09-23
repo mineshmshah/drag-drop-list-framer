@@ -3,7 +3,8 @@ import { useEffect, useState, useRef } from "react";
 import { motion, useMotionValue } from "framer-motion";
 import { findIndex, Position } from "./find-index";
 import move from "array-move";
-import Expandable from './Card';
+import Card from './Card';
+import SubCard from "./SubCard";
 
 interface ItemProps {
   setPosition: any,
@@ -100,9 +101,12 @@ export const Example = () => {
           setPosition={setPosition}
           moveItem={moveItem}
         >
-          <Expandable title={header}>
-            <div>Hello</div>
-          </Expandable>
+          <Card title={header}>
+            {/*{elements.map(({header, id}) => (*/}
+            {/*    <SubCard title={header} key={id}/>*/}
+            {/*    )*/}
+            {/*)}*/}
+          </Card>
         </Item>
       ))}
     </ul>
