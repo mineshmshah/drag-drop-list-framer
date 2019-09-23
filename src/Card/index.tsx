@@ -5,9 +5,10 @@ import SubCard from '../SubCard'
 
 interface ExpandableComponentProps {
     title: string,
+    children?: any
 }
 
-const ExpandableComponent = ({title} : ExpandableComponentProps) => {
+const ExpandableComponent = ({title, children} : ExpandableComponentProps) => {
     const [isCardOpen, setIsCardOpen] = useState(false);
     const onTap = (e : Event) => {
         e.stopImmediatePropagation();
@@ -23,7 +24,7 @@ const ExpandableComponent = ({title} : ExpandableComponentProps) => {
             <ExpandableHeader>
                 {title}
             </ExpandableHeader>
-            {isCardOpen && <SubCard title={'SubCard Example'}/>}
+            {isCardOpen && children}
         </ExpandableContainer>
     );
 };

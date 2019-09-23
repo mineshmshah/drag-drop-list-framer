@@ -93,15 +93,16 @@ export const Example = () => {
 
   return (
     <ul>
-      {blocks.map(({header, id}, i) => (
+      {blocks.map(({header, id, elements}, i) => (
         <Item
           key={id}
           i={i}
           setPosition={setPosition}
           moveItem={moveItem}
-          header={header}
         >
-          <Expandable title={header}/>
+          <Expandable title={header}>
+            <div>Hello</div>
+          </Expandable>
         </Item>
       ))}
     </ul>
