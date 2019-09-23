@@ -12,11 +12,11 @@ const SubCardComponent = ({title, isDragging} : SubCardComponentProps) => {
     const [isSubCardOpen, setIsSubCardOpen] = useState(false);
     const [hasDragged, setHasDragged] = useState(false)
 
-    const onPointerDown = (e : React.PointerEvent<HTMLElement>) => setHasDragged(false);
-    const onPointerMove = (e : React.PointerEvent<HTMLElement>) => {
+    const onPointerDown = (e : React.PointerEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => setHasDragged(false);
+    const onPointerMove = (e : React.PointerEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
         if(isDragging) setHasDragged(true)
     };
-    const onPointerUp = (e : React.PointerEvent<HTMLElement>) => {
+    const onPointerUp = (e : React.PointerEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
         if(!hasDragged) {
             e.stopPropagation();
             setIsSubCardOpen(!isSubCardOpen)
@@ -26,13 +26,21 @@ const SubCardComponent = ({title, isDragging} : SubCardComponentProps) => {
     //     e.stopPropagation();
     //     setIsSubCardOpen(!isSubCardOpen)
     // };
+    const onTap = (e : Event) => {
+        e.stopImmediatePropagation();
+        setIsSubCardOpen(!isSubCardOpen)
+    };
 
     return (
         <SubCardContainer
             isCardOpen={isSubCardOpen}
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
-            onPointerUp={e => onPointerUp(e)}
+            // onPointerUp={e => onPointerUp(e)}
+            // onTouchStart={onPointerDown}
+            // onTouchMove={onPointerMove}
+            // onTouchEnd={e => onPointerUp(e)}
+            // onPointerDown={onPointerDown}
+            // onPointerMove={onPointerMove}
+            onTap={onTap}
         >
             <SubCardHeader>
                 {title}
