@@ -6,13 +6,13 @@ import move from "array-move";
 import Expandable from './Card';
 
 interface ItemProps {
-  color : string,
+  header : string,
   setPosition: any,
   moveItem: any,
   i: number
 }
 
-const Item = ({ color, setPosition, moveItem, i } : ItemProps ) => {
+const Item = ({ header, setPosition, moveItem, i } : ItemProps ) => {
   const [isDragging, setDragging] = useState(false);
 
   // We'll use a `ref` to access the DOM element that the `motion.li` produces.
@@ -38,7 +38,7 @@ const Item = ({ color, setPosition, moveItem, i } : ItemProps ) => {
       initial={false}
       // If we're dragging, we want to set the zIndex of that item to be on top of the other items.
       animate={isDragging ? onTop : flat}
-      style={{ background: color, height: 'auto' }}
+      style={{ height: 'auto' }}
       whileHover={{ boxShadow: `0px 1px 4px rgba(0, 0, 0, 0.2)` }}
       // whileTap={{ scale: 1.12 }}
       drag="y"
@@ -67,13 +67,15 @@ const Item = ({ color, setPosition, moveItem, i } : ItemProps ) => {
       return !isDragging;
     }}
     >
-      <Expandable title={'hello'} isDragging={isDragging}/>
+      <Expandable title={header} isDragging={isDragging}/>
     </motion.li>
   );
 };
 
 export const Example = () => {
-  const [colors, setColors] = useState(initialColors);
+  // const [colors, setColors] = useState(initialColors);
+  const [blocks, setBlocks] = useState(defaultObject);
+
 
   // We need to collect an array of height and position data for all of this component's
   // `Item` children, so we can later us that in calculations to decide when a dragging
@@ -86,18 +88,18 @@ export const Example = () => {
   // sibling.
   const moveItem = (i: number, dragOffset: number) => {
     const targetIndex = findIndex(i, dragOffset, positions);
-    if (targetIndex !== i) setColors(move(colors, i, targetIndex));
+    if (targetIndex !== i) setBlocks(move(blocks, i, targetIndex));
   };
 
   return (
     <ul>
-      {colors.map((color, i) => (
+      {blocks.map(({header, id}, i) => (
         <Item
-          key={color}
+          key={id}
           i={i}
-          color={color}
           setPosition={setPosition}
           moveItem={moveItem}
+          header={header}
         />
       ))}
     </ul>
@@ -112,15 +114,8 @@ const flat = {
 };
 
 const initialColors = ["#FF008C", "#D309E1", "#9C1AFF"];
-const heights:any = {
-  "#FF008C": 60,
-  "#D309E1": 80,
-  "#9C1AFF": 90,
-  "#7700FF": 100
-};
 
-
-const DefaultObject = [
+const defaultObject = [
   {
     id: 1,
     header: "Header",
@@ -157,7 +152,7 @@ const DefaultObject = [
   },
   {
     id: 3,
-    header: "Content",
+    header: "Some other card that has a longer name",
     expanded: false,
     error: false,
     elements: [
