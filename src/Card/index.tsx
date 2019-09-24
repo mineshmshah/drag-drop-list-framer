@@ -12,7 +12,7 @@ const ExpandableComponent = ({title, children} : ExpandableComponentProps) => {
     const [isCardOpen, setIsCardOpen] = useState(false);
     const onTap = (e : Event) => {
         e.stopImmediatePropagation();
-        setIsCardOpen(true)
+        setIsCardOpen(!isCardOpen)
     };
 
     return (

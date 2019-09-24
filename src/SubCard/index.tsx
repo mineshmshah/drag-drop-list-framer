@@ -11,7 +11,7 @@ const SubCardComponent = ({title} : SubCardComponentProps) => {
     const [isSubCardOpen, setIsSubCardOpen] = useState(false);
     const onTap = (e : Event) => {
         e.stopImmediatePropagation();
-        setIsSubCardOpen(true)
+        setIsSubCardOpen(!isSubCardOpen)
     };
 
     return (
