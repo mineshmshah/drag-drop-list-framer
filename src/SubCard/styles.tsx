@@ -11,6 +11,7 @@ const SubCardContainer = styled(motion.div)<CardProps>`
   box-sizing: border-box;
   border-radius: 4px;
   background: ${({isCardOpen}) => isCardOpen ? '#D309E1': 'white'};
+  margin-bottom: 8px;
 `;
 
 const SubCardHeader = styled.p`
