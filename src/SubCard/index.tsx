@@ -13,6 +13,7 @@ const SubCardComponent = ({title, anyDragging, setAnyDragging} : SubCardComponen
     const [isSubCardOpen, setIsSubCardOpen] = useState(false);
     const onTap = (e : Event) => {
         if(!anyDragging){
+            e.stopImmediatePropagation()
             setIsSubCardOpen(!isSubCardOpen)
         }
         setAnyDragging(false)
