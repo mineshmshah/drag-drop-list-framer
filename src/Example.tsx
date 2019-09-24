@@ -5,6 +5,7 @@ import { findIndex, Position } from "./find-index";
 import move from "array-move";
 import Card from './Card';
 import SubCard from "./SubCard";
+import {SubCardContainer} from "./SubCard/styles";
 
 interface ItemProps {
   setPosition: any,
@@ -24,7 +25,6 @@ const Item = ({ setPosition, moveItem, i, ...rest } : ItemProps, ) => {
   // if the user is dragging this DOM element while the drag gesture is active to
   // compensate for any movement as the items are re-positioned.
   const dragOriginY = useMotionValue(0);
-  console.log(dragOriginY)
   // Update the measured position of the item so we can calculate when we should rearrange.
   useEffect(() => {
     setPosition(i, {
@@ -46,8 +46,14 @@ const Item = ({ setPosition, moveItem, i, ...rest } : ItemProps, ) => {
       dragOriginY={dragOriginY}
       dragConstraints={{ top: 0, bottom: 0 }}
       dragElastic={1}
-      onDragStart={() => setDragging(true)}
-      onDragEnd={() => setDragging(false)}
+      onDragStart={(event) => {
+          setDragging(true)
+      }
+      }
+      onDragEnd={(event) => {
+        event && event.stopImmediatePropagation();
+        setDragging(false)
+      }}
       onDrag={(e, { point }) => {
         return moveItem(i, point.y);
       }}
@@ -81,8 +87,15 @@ export const Example = () => {
   // `Item` children, so we can later us that in calculations to decide when a dragging
   // `Item` should swap places with its siblings.
   const positions = useRef<Position[]>([]).current;
-  const setPosition = (i: number, offset: Position) => (positions[i] = offset);
-  const setChildPosition = (i: number, j: number, offset: Position) => (positions[i]['elements'][j] = offset);
+  const setPosition = (i: number, offset: Position) => {
+    return (positions[i] = offset);
+  };
+  const setChildPosition = (i: number) => ( j: number, offset: Position) => {
+    if (!positions[i]['elements'] ){
+      positions[i]['elements'] = []
+    }
+    positions[i]['elements'][j] = offset
+  };
 
   // Find the ideal index for a dragging item based on its position in the array, and its
   // current drag offset. If it's different to its current index, we swap this item with that
@@ -90,6 +103,11 @@ export const Example = () => {
   const moveItem = (i: number, dragOffset: number) => {
     const targetIndex = findIndex(i, dragOffset, positions);
     if (targetIndex !== i) setBlocks(move(blocks, i, targetIndex));
+  };
+
+  const moveChildItem = (i:number) => (j: number, dragOffset: number) => {
+    const targetIndex = findIndex(j, dragOffset, positions[i]['elements'])
+    console.log(targetIndex)
   };
 
   return (
@@ -102,8 +120,15 @@ export const Example = () => {
           moveItem={moveItem}
         >
           <Card title={header}>
-            {elements.map(({header, id}) => (
+            {elements.map(({header, id}, j) => (
+                <Item
+                    key={id}
+                    i={j}
+                    setPosition={setChildPosition(i)}
+                    moveItem={moveChildItem(i)}
+                >
                 <SubCard title={header} key={id}/>
+                </Item>
                 )
             )}
           </Card>
@@ -151,7 +176,7 @@ const defaultObject = [
     elements: [
       {
         id: 1,
-        header: "Title",
+        header: "Another",
         component: "text",
         content:{}
       },
@@ -165,19 +190,19 @@ const defaultObject = [
     elements: [
       {
         id: 1,
-        header: "Title",
+        header: "One",
         component: "text",
         content:{}
       },
       {
         id: 2,
-        header: "Text",
+        header: "Two",
         component: "text",
         content:{}
       },
       {
         id: 3,
-        header: "Another text",
+        header: "Another text three",
         component: "text",
         content:{}
       }
