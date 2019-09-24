@@ -15,6 +15,7 @@ const ExpandableContainer = styled(motion.div)<CardProps>`
   border-radius: 4px;
   background: ${({isCardOpen}) => isCardOpen ? '#ffc591': '#FFF'};
   padding: 8px;
+  overflow: hidden;
 `;
 
 const ExpandableHeader = styled.p`
