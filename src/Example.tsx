@@ -77,6 +77,48 @@ const Item = ({ setPosition, moveItem, i, ...rest } : ItemProps, ) => {
     />
   );
 };
+interface ElementBlock  {
+    header: string,
+    id: any
+}
+
+interface ChildItemInterface {
+  parentIndex: number ,
+  blocks: any,
+  setBlocks: any,
+  elements: ElementBlock[]
+}
+
+const ChildItem = ({parentIndex, blocks, setBlocks, elements }: ChildItemInterface) => {
+  const childPositions = useRef<Position[]>([]).current;
+  const setChildPosition = (childIndex: number, offset: Position) => {
+    return (childPositions[childIndex] = offset);
+  };
+  const moveChildItem = (childIndex: number, dragOffset: number) => {
+    console.log(childPositions)
+    const targetIndex = findIndex(childIndex, dragOffset, childPositions);
+    const updatedElements = move([...blocks][parentIndex]['elements'], childIndex, targetIndex);
+    const updatedBlock = [...blocks];
+    updatedBlock[parentIndex]['elements'] = updatedElements;
+    if (targetIndex !== childIndex)  setBlocks(updatedBlock);
+  };
+
+  return (
+      <div>
+        {elements.map(({header, id}, childIndex) => (
+                <Item
+                    key={id}
+                    i={childIndex}
+                    setPosition={setChildPosition}
+                    moveItem={moveChildItem}
+                >
+                  <SubCard title={header} key={id}/>
+                </Item>
+            )
+        )}
+      </div>
+)
+};
 
 export const Example = () => {
   // const [colors, setColors] = useState(initialColors);
@@ -88,16 +130,16 @@ export const Example = () => {
   // `Item` should swap places with its siblings.
   const positions = useRef<Position[]>([]).current;
   const setPosition = (i: number, offset: Position) => {
-    console.log(positions)
     return (positions[i] = offset);
   };
-  const setChildPosition = (i: number) => ( j: number, offset: Position) => {
-    console.log(positions[i])
-    if (!positions[i]['elements'] ){
-      positions[i]['elements'] = []
-    }
-    positions[i]['elements'][j] = offset;
-  };
+  // const setChildPosition = (i: number) => ( j: number, offset: Position) => {
+  //   // console.log(positions[i])
+  //   // if (!positions[i]['elements'] ){
+  //   //   positions[i]['elements'] = []
+  //   // }
+  //   // positions[i]['elements'][j] = offset;
+  //   // childPositions[i] = childPositions[i] ?  : []
+  // };
 
   // Find the ideal index for a dragging item based on its position in the array, and its
   // current drag offset. If it's different to its current index, we swap this item with that
@@ -107,16 +149,16 @@ export const Example = () => {
     if (targetIndex !== i) setBlocks(move(blocks, i, targetIndex));
   };
 
-  const moveChildItem = (i:number) => (j: number, dragOffset: number) => {
-    if(positions[i]['elements']) {
-      // console.log(positions)
-      const targetIndex = findIndex(j, dragOffset, positions[i]['elements']);
-      const updatedElements = move([...blocks][i]['elements'], j, targetIndex);
-      const updatedBlock = [...blocks];
-      updatedBlock[i]['elements'] = updatedElements;
-      if (targetIndex !== j)  setBlocks(updatedBlock);
-    }
-  };
+  // const moveChildItem = (i:number) => (j: number, dragOffset: number) => {
+  //   if(positions[i]['elements']) {
+  //     // console.log(positions)
+  //     const targetIndex = findIndex(j, dragOffset, positions[i]['elements']);
+  //     const updatedElements = move([...blocks][i]['elements'], j, targetIndex);
+  //     const updatedBlock = [...blocks];
+  //     updatedBlock[i]['elements'] = updatedElements;
+  //     if (targetIndex !== j)  setBlocks(updatedBlock);
+  //   }
+  // };
 
   return (
     <ul>
@@ -128,25 +170,19 @@ export const Example = () => {
           moveItem={moveItem}
         >
           <Card title={header}>
-            {elements.map(({header, id}, j) => {
-                  return (
-                      <Item
-                          key={id}
-                          i={j}
-                          setPosition={setChildPosition(i)}
-                          moveItem={moveChildItem(i)}
-                      >
-                        <SubCard title={header} key={id}/>
-                      </Item>
-                  );
-                }
-            )}
+            <ChildItem
+                elements={elements}
+                parentIndex={i}
+                blocks={blocks}
+                setBlocks={setBlocks}
+                />
           </Card>
         </Item>
       ))}
     </ul>
   );
 };
+
 
 // Spring configs
 const onTop = { zIndex: 1 };
