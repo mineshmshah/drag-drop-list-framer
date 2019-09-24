@@ -51,7 +51,7 @@ const Item = ({ setPosition, moveItem, i, ...rest } : ItemProps, ) => {
       }
       }
       onDragEnd={(event) => {
-        event && event.stopImmediatePropagation();
+        // event && event.stopImmediatePropagation();
         setDragging(false)
       }}
       onDrag={(e, { point }) => {
