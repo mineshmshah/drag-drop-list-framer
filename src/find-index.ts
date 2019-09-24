@@ -3,6 +3,7 @@ import { clamp, distance } from "@popmotion/popcorn";
 export interface Position {
   top: number;
   height: number;
+  elements?: any
 }
 
 // Prevent rapid reverse swapping

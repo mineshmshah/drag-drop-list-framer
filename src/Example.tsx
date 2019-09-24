@@ -3,16 +3,18 @@ import { useEffect, useState, useRef } from "react";
 import { motion, useMotionValue } from "framer-motion";
 import { findIndex, Position } from "./find-index";
 import move from "array-move";
-import Expandable from './Card';
+import Card from './Card';
+import SubCard from "./SubCard";
+import {SubCardContainer} from "./SubCard/styles";
 
 interface ItemProps {
-  color : string,
   setPosition: any,
   moveItem: any,
-  i: number
+  i: number,
+  children: any
 }
 
-const Item = ({ color, setPosition, moveItem, i } : ItemProps ) => {
+const Item = ({ setPosition, moveItem, i, ...rest } : ItemProps, ) => {
   const [isDragging, setDragging] = useState(false);
 
   // We'll use a `ref` to access the DOM element that the `motion.li` produces.
@@ -23,7 +25,6 @@ const Item = ({ color, setPosition, moveItem, i } : ItemProps ) => {
   // if the user is dragging this DOM element while the drag gesture is active to
   // compensate for any movement as the items are re-positioned.
   const dragOriginY = useMotionValue(0);
-  console.log(dragOriginY)
   // Update the measured position of the item so we can calculate when we should rearrange.
   useEffect(() => {
     setPosition(i, {
@@ -38,15 +39,21 @@ const Item = ({ color, setPosition, moveItem, i } : ItemProps ) => {
       initial={false}
       // If we're dragging, we want to set the zIndex of that item to be on top of the other items.
       animate={isDragging ? onTop : flat}
-      style={{ background: color, height: 'auto' }}
+      style={{ height: 'auto' }}
       whileHover={{ boxShadow: `0px 1px 4px rgba(0, 0, 0, 0.2)` }}
       // whileTap={{ scale: 1.12 }}
       drag="y"
       dragOriginY={dragOriginY}
       dragConstraints={{ top: 0, bottom: 0 }}
       dragElastic={1}
-      onDragStart={() => setDragging(true)}
-      onDragEnd={() => setDragging(false)}
+      onDragStart={(event) => {
+          setDragging(true)
+      }
+      }
+      onDragEnd={(event) => {
+        event && event.stopImmediatePropagation();
+        setDragging(false)
+      }}
       onDrag={(e, { point }) => {
         return moveItem(i, point.y);
       }}
@@ -66,43 +73,116 @@ const Item = ({ color, setPosition, moveItem, i } : ItemProps ) => {
       // dragging, we don't want any animation to occur.
       return !isDragging;
     }}
-    >
-      <Expandable title={'hello'} isDragging={isDragging}/>
-    </motion.li>
+      {...rest}
+    />
   );
+};
+interface ElementBlock  {
+    header: string,
+    id: any
+}
+
+interface ChildItemInterface {
+  parentIndex: number ,
+  blocks: any,
+  setBlocks: any,
+  elements: ElementBlock[]
+}
+
+const ChildItem = ({parentIndex, blocks, setBlocks, elements }: ChildItemInterface) => {
+  const childPositions = useRef<Position[]>([]).current;
+  const setChildPosition = (childIndex: number, offset: Position) => {
+    return (childPositions[childIndex] = offset);
+  };
+  const moveChildItem = (childIndex: number, dragOffset: number) => {
+    console.log(childPositions)
+    const targetIndex = findIndex(childIndex, dragOffset, childPositions);
+    const updatedElements = move([...blocks][parentIndex]['elements'], childIndex, targetIndex);
+    const updatedBlock = [...blocks];
+    updatedBlock[parentIndex]['elements'] = updatedElements;
+    if (targetIndex !== childIndex)  setBlocks(updatedBlock);
+  };
+
+  return (
+      <div>
+        {elements.map(({header, id}, childIndex) => (
+                <Item
+                    key={id}
+                    i={childIndex}
+                    setPosition={setChildPosition}
+                    moveItem={moveChildItem}
+                >
+                  <SubCard title={header} key={id}/>
+                </Item>
+            )
+        )}
+      </div>
+)
 };
 
 export const Example = () => {
-  const [colors, setColors] = useState(initialColors);
+  // const [colors, setColors] = useState(initialColors);
+  const [blocks, setBlocks] = useState(defaultObject);
+
 
   // We need to collect an array of height and position data for all of this component's
   // `Item` children, so we can later us that in calculations to decide when a dragging
   // `Item` should swap places with its siblings.
   const positions = useRef<Position[]>([]).current;
-  const setPosition = (i: number, offset: Position) => (positions[i] = offset);
+  const setPosition = (i: number, offset: Position) => {
+    return (positions[i] = offset);
+  };
+  // const setChildPosition = (i: number) => ( j: number, offset: Position) => {
+  //   // console.log(positions[i])
+  //   // if (!positions[i]['elements'] ){
+  //   //   positions[i]['elements'] = []
+  //   // }
+  //   // positions[i]['elements'][j] = offset;
+  //   // childPositions[i] = childPositions[i] ?  : []
+  // };
 
   // Find the ideal index for a dragging item based on its position in the array, and its
   // current drag offset. If it's different to its current index, we swap this item with that
   // sibling.
   const moveItem = (i: number, dragOffset: number) => {
     const targetIndex = findIndex(i, dragOffset, positions);
-    if (targetIndex !== i) setColors(move(colors, i, targetIndex));
+    if (targetIndex !== i) setBlocks(move(blocks, i, targetIndex));
   };
+
+  // const moveChildItem = (i:number) => (j: number, dragOffset: number) => {
+  //   if(positions[i]['elements']) {
+  //     // console.log(positions)
+  //     const targetIndex = findIndex(j, dragOffset, positions[i]['elements']);
+  //     const updatedElements = move([...blocks][i]['elements'], j, targetIndex);
+  //     const updatedBlock = [...blocks];
+  //     updatedBlock[i]['elements'] = updatedElements;
+  //     if (targetIndex !== j)  setBlocks(updatedBlock);
+  //   }
+  // };
 
   return (
     <ul>
-      {colors.map((color, i) => (
+      {blocks.map(({header, id, elements}, i) => (
         <Item
-          key={color}
+          key={id}
           i={i}
-          color={color}
           setPosition={setPosition}
           moveItem={moveItem}
-        />
+        >
+          <Card title={header}>
+            <ChildItem
+                elements={elements}
+                parentIndex={i}
+                blocks={blocks}
+                setBlocks={setBlocks}
+                />
+          </Card>
+        </Item>
       ))}
     </ul>
   );
 };
+
 
 // Spring configs
 const onTop = { zIndex: 1 };
@@ -112,9 +192,66 @@ const flat = {
 };
 
 const initialColors = ["#FF008C", "#D309E1", "#9C1AFF"];
-const heights:any = {
-  "#FF008C": 60,
-  "#D309E1": 80,
-  "#9C1AFF": 90,
-  "#7700FF": 100
-};
+
+const defaultObject = [
+  {
+    id: 1,
+    header: "Header",
+    expanded: false,
+    error: false,
+    elements: [
+      {
+        id: 1,
+        header: "Title",
+        component: "text",
+        content:{}
+      },
+      {
+        id: 2,
+        header: "Text",
+        component: "text",
+        content:{}
+      }
+    ]
+  },
+  {
+    id: 2,
+    header: "Content",
+    expanded: false,
+    error: false,
+    elements: [
+      {
+        id: 1,
+        header: "Another",
+        component: "text",
+        content:{}
+      },
+    ]
+  },
+  {
+    id: 3,
+    header: "Some other card that has a longer name",
+    expanded: false,
+    error: false,
+    elements: [
+      {
+        id: 1,
+        header: "One",
+        component: "text",
+        content:{}
+      },
+      {
+        id: 2,
+        header: "Two",
+        component: "text",
+        content:{}
+      },
+      {
+        id: 3,
+        header: "Another text three",
+        component: "text",
+        content:{}
+      }
+    ]
+  }
+];

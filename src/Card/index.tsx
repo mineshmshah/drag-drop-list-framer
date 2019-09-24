@@ -5,31 +5,11 @@ import SubCard from '../SubCard'
 
 interface ExpandableComponentProps {
     title: string,
-    isDragging: boolean
+    children?: any
 }
 
-const ExpandableComponent = ({title, isDragging} : ExpandableComponentProps) => {
+const ExpandableComponent = ({title, children} : ExpandableComponentProps) => {
     const [isCardOpen, setIsCardOpen] = useState(false);
-    const [hasDragged, setHasDragged] = useState(false)
-
-    const onPointerDown = (e : React.TouchEvent<HTMLElement>| React.PointerEvent<HTMLElement>) => setHasDragged(false);
-    const onPointerMove = (e : React.TouchEvent<HTMLElement> | React.PointerEvent<HTMLElement>) => {
-        if(isDragging) setHasDragged(true)
-    };
-    const onPointerUp = (e : React.TouchEvent<HTMLElement>| React.PointerEvent<HTMLElement> ) => {
-        if(!hasDragged) {
-            e.stopPropagation();
-            setIsCardOpen(!isCardOpen)
-        }
-    };
-    //
-    //  const onCardClick = (e : React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
-    //      console.log(isDragging)
-    //      if(true) {
-    //          e.stopPropagation();
-    //          setIsCardOpen(!isCardOpen)
-    //      }
-    // };
     const onTap = (e : Event) => {
         e.stopImmediatePropagation();
         setIsCardOpen(!isCardOpen)
@@ -40,17 +20,11 @@ const ExpandableComponent = ({title, isDragging} : ExpandableComponentProps) => 
             onMouseDown={()=>console.log('hello')}
             isCardOpen={isCardOpen}
             onTap={onTap}
-            // onTouchStart={onPointerDown}
-            // onTouchMove={onPointerMove}
-            // onTouchEnd={e => onPointerUp(e)}
-            // onPointerDown={onPointerDown}
-            // onPointerMove={onPointerMove}
-            // onPointerUp={e => onPointerUp(e)}
         >
             <ExpandableHeader>
                 {title}
             </ExpandableHeader>
-            {isCardOpen && <SubCard title={'SubCard Example'} isDragging={isDragging}/>}
+            {isCardOpen && children}
         </ExpandableContainer>
     );
 };
