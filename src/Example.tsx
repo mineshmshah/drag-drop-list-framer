@@ -88,13 +88,15 @@ export const Example = () => {
   // `Item` should swap places with its siblings.
   const positions = useRef<Position[]>([]).current;
   const setPosition = (i: number, offset: Position) => {
+    console.log(positions)
     return (positions[i] = offset);
   };
   const setChildPosition = (i: number) => ( j: number, offset: Position) => {
+    console.log(positions[i])
     if (!positions[i]['elements'] ){
       positions[i]['elements'] = []
     }
-    positions[i]['elements'][j] = offset
+    positions[i]['elements'][j] = offset;
   };
 
   // Find the ideal index for a dragging item based on its position in the array, and its
@@ -106,8 +108,14 @@ export const Example = () => {
   };
 
   const moveChildItem = (i:number) => (j: number, dragOffset: number) => {
-    const targetIndex = findIndex(j, dragOffset, positions[i]['elements'])
-    console.log(targetIndex)
+    if(positions[i]['elements']) {
+      // console.log(positions)
+      const targetIndex = findIndex(j, dragOffset, positions[i]['elements']);
+      const updatedElements = move([...blocks][i]['elements'], j, targetIndex);
+      const updatedBlock = [...blocks];
+      updatedBlock[i]['elements'] = updatedElements;
+      if (targetIndex !== j)  setBlocks(updatedBlock);
+    }
   };
 
   return (
@@ -120,16 +128,18 @@ export const Example = () => {
           moveItem={moveItem}
         >
           <Card title={header}>
-            {elements.map(({header, id}, j) => (
-                <Item
-                    key={id}
-                    i={j}
-                    setPosition={setChildPosition(i)}
-                    moveItem={moveChildItem(i)}
-                >
-                <SubCard title={header} key={id}/>
-                </Item>
-                )
+            {elements.map(({header, id}, j) => {
+                  return (
+                      <Item
+                          key={id}
+                          i={j}
+                          setPosition={setChildPosition(i)}
+                          moveItem={moveChildItem(i)}
+                      >
+                        <SubCard title={header} key={id}/>
+                      </Item>
+                  );
+                }
             )}
           </Card>
         </Item>
