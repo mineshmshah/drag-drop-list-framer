@@ -18,9 +18,6 @@ const SubCardComponent = ({title} : SubCardComponentProps) => {
         <SubCardContainer
             isCardOpen={isSubCardOpen}
             onTap={onTap}
-            onDragEnd={event => event.stopImmediatePropagation()}
-            onDrag={event => event.stopImmediatePropagation()}
-            onDragStart={event => event.stopImmediatePropagation()}
         >
             <SubCardHeader>
                 {title}
