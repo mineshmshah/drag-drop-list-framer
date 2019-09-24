@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import { SubCardContainer, SubCardHeader } from './styles'
 import { ComponentContainer } from "../ComponentContainer/styles";
-import {ExpandableContainer} from "../Card/styles";
 
 interface SubCardComponentProps {
     title: string,
+    anyDragging: boolean,
+    setAnyDragging: any,
+
 }
 
-const SubCardComponent = ({title} : SubCardComponentProps) => {
+const SubCardComponent = ({title, anyDragging, setAnyDragging} : SubCardComponentProps) => {
     const [isSubCardOpen, setIsSubCardOpen] = useState(false);
     const onTap = (e : Event) => {
-        e.stopImmediatePropagation();
-        setIsSubCardOpen(!isSubCardOpen)
+        if(!anyDragging){
+            setIsSubCardOpen(!isSubCardOpen)
+        }
+        setAnyDragging(false)
     };
 
     return (

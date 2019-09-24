@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
-import { motion } from "framer-motion";
 import { ExpandableHeader, ExpandableContainer } from './styles'
-import SubCard from '../SubCard'
 
 interface ExpandableComponentProps {
     title: string,
-    children?: any
+    children?: any,
+    anyDragging? : boolean,
+    setAnyDragging: any,
 }
 
-const ExpandableComponent = ({title, children} : ExpandableComponentProps) => {
+const ExpandableComponent = ({title, children, anyDragging, setAnyDragging} : ExpandableComponentProps) => {
     const [isCardOpen, setIsCardOpen] = useState(false);
     const onTap = (e : Event) => {
-        e.stopImmediatePropagation();
-        setIsCardOpen(!isCardOpen)
+        if(!anyDragging){
+            setIsCardOpen(!isCardOpen)
+        }
+        setAnyDragging(false)
     };
 
     return (

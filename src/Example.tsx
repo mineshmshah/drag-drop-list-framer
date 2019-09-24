@@ -11,10 +11,11 @@ interface ItemProps {
   setPosition: any,
   moveItem: any,
   i: number,
-  children: any
+  children: any,
+  setAnyDragging: any
 }
 
-const Item = ({ setPosition, moveItem, i, ...rest } : ItemProps, ) => {
+const Item = ({ setPosition, moveItem, i, setAnyDragging, ...rest } : ItemProps, ) => {
   const [isDragging, setDragging] = useState(false);
 
   // We'll use a `ref` to access the DOM element that the `motion.li` produces.
@@ -48,10 +49,10 @@ const Item = ({ setPosition, moveItem, i, ...rest } : ItemProps, ) => {
       dragElastic={1}
       onDragStart={(event) => {
           setDragging(true)
+          setAnyDragging(true)
       }
       }
       onDragEnd={(event) => {
-        event && event.stopImmediatePropagation();
         setDragging(false)
       }}
       onDrag={(e, { point }) => {
@@ -86,16 +87,17 @@ interface ChildItemInterface {
   parentIndex: number ,
   blocks: any,
   setBlocks: any,
-  elements: ElementBlock[]
+  elements: ElementBlock[],
+  setAnyDragging: any,
+  anyDragging: boolean
 }
 
-const ChildItem = ({parentIndex, blocks, setBlocks, elements }: ChildItemInterface) => {
+const ChildItem = ({parentIndex, blocks, setBlocks, elements, setAnyDragging, anyDragging }: ChildItemInterface) => {
   const childPositions = useRef<Position[]>([]).current;
   const setChildPosition = (childIndex: number, offset: Position) => {
     return (childPositions[childIndex] = offset);
   };
   const moveChildItem = (childIndex: number, dragOffset: number) => {
-    console.log(childPositions)
     const targetIndex = findIndex(childIndex, dragOffset, childPositions);
     const updatedElements = move([...blocks][parentIndex]['elements'], childIndex, targetIndex);
     const updatedBlock = [...blocks];
@@ -107,12 +109,13 @@ const ChildItem = ({parentIndex, blocks, setBlocks, elements }: ChildItemInterfa
       <div>
         {elements.map(({header, id}, childIndex) => (
                 <Item
+                    setAnyDragging={setAnyDragging}
                     key={id}
                     i={childIndex}
                     setPosition={setChildPosition}
                     moveItem={moveChildItem}
                 >
-                  <SubCard title={header} key={id}/>
+                  <SubCard title={header} key={id} anyDragging={anyDragging} setAnyDragging={setAnyDragging}/>
                 </Item>
             )
         )}
@@ -123,7 +126,7 @@ const ChildItem = ({parentIndex, blocks, setBlocks, elements }: ChildItemInterfa
 export const Example = () => {
   // const [colors, setColors] = useState(initialColors);
   const [blocks, setBlocks] = useState(defaultObject);
-
+  const [anyDragging, setAnyDragging] = useState(false);
 
   // We need to collect an array of height and position data for all of this component's
   // `Item` children, so we can later us that in calculations to decide when a dragging
@@ -132,14 +135,6 @@ export const Example = () => {
   const setPosition = (i: number, offset: Position) => {
     return (positions[i] = offset);
   };
-  // const setChildPosition = (i: number) => ( j: number, offset: Position) => {
-  //   // console.log(positions[i])
-  //   // if (!positions[i]['elements'] ){
-  //   //   positions[i]['elements'] = []
-  //   // }
-  //   // positions[i]['elements'][j] = offset;
-  //   // childPositions[i] = childPositions[i] ?  : []
-  // };
 
   // Find the ideal index for a dragging item based on its position in the array, and its
   // current drag offset. If it's different to its current index, we swap this item with that
@@ -149,28 +144,22 @@ export const Example = () => {
     if (targetIndex !== i) setBlocks(move(blocks, i, targetIndex));
   };
 
-  // const moveChildItem = (i:number) => (j: number, dragOffset: number) => {
-  //   if(positions[i]['elements']) {
-  //     // console.log(positions)
-  //     const targetIndex = findIndex(j, dragOffset, positions[i]['elements']);
-  //     const updatedElements = move([...blocks][i]['elements'], j, targetIndex);
-  //     const updatedBlock = [...blocks];
-  //     updatedBlock[i]['elements'] = updatedElements;
-  //     if (targetIndex !== j)  setBlocks(updatedBlock);
-  //   }
-  // };
 
   return (
     <ul>
       {blocks.map(({header, id, elements}, i) => (
         <Item
+          setAnyDragging={setAnyDragging}
           key={id}
           i={i}
           setPosition={setPosition}
           moveItem={moveItem}
         >
-          <Card title={header}>
+          <Card title={header} anyDragging={anyDragging} setAnyDragging={setAnyDragging}
+          >
             <ChildItem
+                setAnyDragging={setAnyDragging}
+                anyDragging={anyDragging}
                 elements={elements}
                 parentIndex={i}
                 blocks={blocks}
